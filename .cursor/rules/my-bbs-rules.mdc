@@ -1,3 +1,5 @@
 ---
 alwaysApply: true
+description: "常に適用されるルール"
+commitMessage: "chore: 常に適用されるルールを定義"
 ---
