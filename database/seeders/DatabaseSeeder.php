@@ -3,6 +3,10 @@
 namespace Database\Seeders;
 
 use App\Models\User;
+use App\Models\Event;
+use App\Models\Fighter;
+use App\Models\Thread;
+use App\Models\Post;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -19,5 +23,16 @@ class DatabaseSeeder extends Seeder
             'name' => 'Test User',
             'email' => 'test@example.com',
         ]);
+
+        Event::factory(5)
+            ->has(Thread::factory(3)
+                ->has(Post::factory(10)))
+            ->create();
+
+        Fighter::factory(10)
+            ->has(Thread::factory(2)
+                ->has(Post::factory(5)))
+            ->create();
+
     }
 }
