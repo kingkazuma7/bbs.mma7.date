@@ -27,6 +27,12 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('events.index') }}">大会一覧</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('fighters.index') }}">選手一覧</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('threads.index') }}">スレッド一覧</a>
+                    </li>
                     {{-- 他のナビゲーションアイテムをここに追加 --}}
                 </ul>
             </div>
