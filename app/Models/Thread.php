@@ -11,6 +11,12 @@ class Thread extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'title',
+        'event_id',
+        'fighter_id',
+    ];
+
     public function event(): BelongsTo
     {
         return $this->belongsTo(Event::class);
