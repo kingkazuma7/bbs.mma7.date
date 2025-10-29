@@ -2,8 +2,8 @@
 
 @section('content')
 <div class="container">
-    <h1>大会一覧</h1>
-    <a href="{{ route('events.create') }}" class="btn btn-primary mb-3">新規大会作成</a>
+    <h1>{{ __('messages.events_list') }}</h1>
+    <a href="{{ route('events.create') }}" class="btn btn-primary mb-3">{{ __('messages.create_new_event') }}</a>
     <ul class="list-group">
         @foreach($events as $event)
             <li class="list-group-item">

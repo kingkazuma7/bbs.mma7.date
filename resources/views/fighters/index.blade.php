@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container">
-    <h1>選手一覧</h1>
+    <h1>{{ __('messages.fighters_list') }}</h1>
     <ul class="list-group">
         @foreach($fighters as $fighter)
             <li class="list-group-item">
