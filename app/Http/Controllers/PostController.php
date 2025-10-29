@@ -17,6 +17,6 @@ class PostController extends Controller
 
         $thread->posts()->create($validated);
 
-        return back()->with('success', '投稿が完了しました！');
+        return back()->with('success', __('messages.post_success'));
     }
 }

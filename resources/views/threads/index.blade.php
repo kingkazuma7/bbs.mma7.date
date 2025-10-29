@@ -2,8 +2,8 @@
 
 @section('content')
 <div class="container">
-    <h1>スレッド一覧</h1>
-    <a href="{{ route('threads.create') }}" class="btn btn-primary mb-3">新規スレッド作成</a>
+    <h1>{{ __('messages.threads_list') }}</h1>
+    <a href="{{ route('threads.create') }}" class="btn btn-primary mb-3">{{ __('messages.create_new_thread') }}</a>
     <ul class="list-group">
         @foreach($threads as $thread)
             <li class="list-group-item">
