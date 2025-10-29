@@ -10,6 +10,8 @@ class Event extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['name'];
+
     public function threads(): HasMany
     {
         return $this->hasMany(Thread::class);
