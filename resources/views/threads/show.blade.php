@@ -13,6 +13,7 @@
                 <li class="list-group-item">
                     <strong>{{ $post->name }}</strong>: {{ $post->message }}
                     <br><small>{{ $post->created_at->diffForHumans() }}</small>
+                    <button type="button" class="btn btn-sm btn-outline-info float-end reply-button" data-post-id="{{ $post->id }}" data-post-name="{{ $post->name }}">{{ __('messages.reply_button') }}</button>
                 </li>
             @endforeach
         </ul>
@@ -27,7 +28,7 @@
         </div>
         <div class="mb-3">
             <label for="message" class="form-label">{{ __('messages.message_label') }}</label>
-            <textarea class="form-control" id="message" name="message" rows="3" required></textarea>
+            <textarea class="form-control" id="post-message" name="message" rows="3" required></textarea>
         </div>
         <button type="submit" class="btn btn-primary">{{ __('messages.post_button') }}</button>
     </form>

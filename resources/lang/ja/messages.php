@@ -40,4 +40,5 @@ return [
     'message_label' => 'メッセージ',
     'post_button' => '投稿',
     'post_success' => '投稿が完了しました！',
+    'reply_button' => '返信',
 ];

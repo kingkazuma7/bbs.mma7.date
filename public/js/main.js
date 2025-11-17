@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     initAnonymousNameField();
     saveAnonymousNameOnSubmit();
+    addReplyButtonListener();
 });
 
 function initAnonymousNameField() {
@@ -25,5 +26,18 @@ function saveAnonymousNameOnSubmit() {
         if (nameInput && nameInput.value !== '') {
             localStorage.setItem('last_anonymous_name', nameInput.value);
         }
+    });
+}
+
+function addReplyButtonListener() {
+    document.querySelectorAll('.reply-button').forEach(button => {
+        button.addEventListener('click', function() {
+            const postName = this.dataset.postName;
+            const messageTextarea = document.getElementById('post-message');
+            if (messageTextarea) {
+                messageTextarea.value = `>> ${postName}: ` + messageTextarea.value;
+                messageTextarea.focus();
+            }
+        });
     });
 }
