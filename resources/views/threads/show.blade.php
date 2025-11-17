@@ -3,12 +3,6 @@
 @section('content')
 <div class="container">
     <h1>{{ __('messages.thread_details') }}: {{ $thread->title }}</h1>
-    @if ($thread->event)
-        <p>{{ __('messages.event_label') }}: {{ $thread->event->name }}</p>
-    @endif
-    @if ($thread->fighter)
-        <p>{{ __('messages.fighter_label') }}: {{ $thread->fighter->name }}</p>
-    @endif
 
     <h2 class="mt-4">{{ __('messages.posts_list') }}</h2>
     @if($thread->posts->isEmpty())

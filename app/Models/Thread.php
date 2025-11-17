@@ -13,13 +13,7 @@ class Thread extends Model
 
     protected $fillable = [
         'title',
-        'fighter_id',
     ];
-
-    public function fighter(): BelongsTo
-    {
-        return $this->belongsTo(Fighter::class);
-    }
 
     public function posts(): HasMany
     {

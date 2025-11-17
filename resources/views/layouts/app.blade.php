@@ -25,9 +25,6 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('fighters.index') }}">{{ __('messages.fighters_list') }}</a>
-                    </li>
-                    <li class="nav-item">
                         <a class="nav-link" href="{{ route('threads.index') }}">{{ __('messages.threads_list') }}</a>
                     </li>
                     {{-- 他のナビゲーションアイテムをここに追加 --}}

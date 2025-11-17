@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Thread;
-use App\Models\Fighter; // 追加
 
 class ThreadController extends Controller
 {
@@ -16,15 +15,13 @@ class ThreadController extends Controller
 
     public function create()
     {
-        $fighters = Fighter::all();
-        return view('threads.create', compact('fighters'));
+        return view('threads.create');
     }
 
     public function store(Request $request)
     {
         $validated = $request->validate([
             'title' => 'required|string|max:255',
-            'fighter_id' => 'nullable|exists:fighters,id',
         ]);
 
         Thread::create($validated);
