@@ -21,15 +21,6 @@
             <input type="text" class="form-control" id="title" name="title" value="{{ old('title') }}" required>
         </div>
         <div class="mb-3">
-            <label for="event_id" class="form-label">{{ __('messages.related_event') }} ({{ __('messages.optional') }})</label>
-            <select class="form-select" id="event_id" name="event_id">
-                <option value="">{{ __('messages.select_placeholder') }}</option>
-                @foreach($events as $event)
-                    <option value="{{ $event->id }}" {{ old('event_id') == $event->id ? 'selected' : '' }}>{{ $event->name }}</option>
-                @endforeach
-            </select>
-        </div>
-        <div class="mb-3">
             <label for="fighter_id" class="form-label">{{ __('messages.related_fighter') }} ({{ __('messages.optional') }})</label>
             <select class="form-select" id="fighter_id" name="fighter_id">
                 <option value="">{{ __('messages.select_placeholder') }}</option>

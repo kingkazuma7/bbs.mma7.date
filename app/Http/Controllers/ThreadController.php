@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Thread;
-use App\Models\Event; // 追加
 use App\Models\Fighter; // 追加
 
 class ThreadController extends Controller
@@ -17,16 +16,14 @@ class ThreadController extends Controller
 
     public function create()
     {
-        $events = Event::all();
         $fighters = Fighter::all();
-        return view('threads.create', compact('events', 'fighters'));
+        return view('threads.create', compact('fighters'));
     }
 
     public function store(Request $request)
     {
         $validated = $request->validate([
             'title' => 'required|string|max:255',
-            'event_id' => 'nullable|exists:events,id',
             'fighter_id' => 'nullable|exists:fighters,id',
         ]);
 
