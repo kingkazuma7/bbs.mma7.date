@@ -11,7 +11,7 @@
         <ul class="list-group">
             @foreach($thread->posts as $post)
                 <li class="list-group-item">
-                    <strong>{{ $post->name ?? __('messages.anonymous') }}</strong>: {{ $post->message }}
+                    <strong>{{ $post->name }}</strong>: {{ $post->message }}
                     <br><small>{{ $post->created_at->diffForHumans() }}</small>
                 </li>
             @endforeach
@@ -23,7 +23,7 @@
         @csrf
         <div class="mb-3">
             <label for="name" class="form-label">{{ __('messages.name_label') }} ({{ __('messages.optional') }})</label>
-            <input type="text" class="form-control" id="name" name="name">
+            <input type="text" class="form-control" id="anonymous-name" name="name">
         </div>
         <div class="mb-3">
             <label for="message" class="form-label">{{ __('messages.message_label') }}</label>
