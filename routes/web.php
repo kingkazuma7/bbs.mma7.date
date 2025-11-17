@@ -1,15 +1,14 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\EventController;
 use App\Http\Controllers\FighterController;
 use App\Http\Controllers\ThreadController;
 use App\Http\Controllers\PostController;
 
-Route::redirect('/', '/events');
+Route::redirect('/', '/threads');
 
 // Eventリソースルート
-Route::resource('events', EventController::class);
+//    Route::resource('events', EventController::class);
 
 // Fighterリソースルート
 Route::resource('fighters', FighterController::class);

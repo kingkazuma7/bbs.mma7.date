@@ -13,14 +13,8 @@ class Thread extends Model
 
     protected $fillable = [
         'title',
-        'event_id',
         'fighter_id',
     ];
-
-    public function event(): BelongsTo
-    {
-        return $this->belongsTo(Event::class);
-    }
 
     public function fighter(): BelongsTo
     {
