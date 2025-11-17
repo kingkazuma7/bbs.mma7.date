@@ -24,15 +24,5 @@ class DatabaseSeeder extends Seeder
         //     'email' => 'test@example.com',
         // ]);
 
-        Event::factory(5)
-            ->has(Thread::factory(3)
-                ->has(Post::factory(10)))
-            ->create();
-
-        Fighter::factory(10)
-            ->has(Thread::factory(2)
-                ->has(Post::factory(5)))
-            ->create();
-
     }
 }
