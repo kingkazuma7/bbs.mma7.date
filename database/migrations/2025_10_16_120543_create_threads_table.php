@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('threads', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('fighter_id')->nullable()->constrained()->onDelete('set null');
             $table->string('title');
             $table->timestamps();
         });
