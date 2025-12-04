@@ -9,6 +9,10 @@ export default defineConfig({
         }),
     ],
 
+    optimizeDeps: {
+        disabled: true, // 一時的に無効化
+    },
+
     // ↓↓　WSL使用時のみ必要なコード　↓↓
     server: {
         hmr: {
