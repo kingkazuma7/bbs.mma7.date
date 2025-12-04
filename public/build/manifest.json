@@ -1,0 +1,11 @@
+{
+  "resources/scss/app.scss": {
+    "file": "assets/app-23NSH9ET.css",
+    "src": "resources/scss/app.scss",
+    "isEntry": true,
+    "name": "app",
+    "names": [
+      "app.css"
+    ]
+  }
+}
