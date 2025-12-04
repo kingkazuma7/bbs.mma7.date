@@ -1,0 +1,17 @@
+> node --max-old-space-size=8192 ./node_modules/vite/bin/vite.js build
+
+You are using Node.js 19.8.1. Vite requires Node.js version 20.19+ or 22.12+. Please upgrade your Node.js version.
+vite v7.2.2 building client environment for production...
+Deprecation Warning [import]: Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+  ╷
+1 │ @import 'tailwindcss';
+  │         ^^^^^^^^^^^^^
+  ╵
+    resources/scss/app.scss 1:9  root stylesheet
+
+✓ 1 modules transformed.
+public/build/manifest.json             0.19 kB │ gzip: 0.13 kB
+public/build/assets/app-DzZFBmn1.css  19.80 kB │ gzip: 5.64 kB
