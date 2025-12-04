@@ -14,6 +14,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     @if(App::environment() !== 'production')
         @vite('resources/scss/app.scss')
+    @else
+        <link href="{{ asset('build/assets/app-23NSH9ET.css') }}" rel="stylesheet">
     @endif
     <script src="{{ asset('js/main.js') }}" defer></script>
 </head>
