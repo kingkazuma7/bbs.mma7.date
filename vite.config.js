@@ -8,4 +8,12 @@ export default defineConfig({
             refresh: true,
         }),
     ],
+
+    // ↓↓　WSL使用時のみ必要なコード　↓↓
+    server: {
+        hmr: {
+            host: 'localhost'
+        }
+    }
+    // ↑↑　WSL使用時のみ必要なコード　↑↑
 });
