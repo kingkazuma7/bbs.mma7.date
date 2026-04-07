@@ -129,6 +129,9 @@ fighter-vote/
 
 ## 📊 DB スキーマ（一目で確認）
 
+ログイン
+`mysql -u kingkazuma7 -p`
+
 ```
 fighters
 ├── id (PK)
