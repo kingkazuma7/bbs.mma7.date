@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>格闘裏ベガス</title>
 
@@ -31,9 +32,8 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('threads.index') }}">{{ __('messages.threads_list') }}</a>
+                        <a class="nav-link" href="{{ url('/') }}">投票ページ</a>
                     </li>
-                    {{-- 他のナビゲーションアイテムをここに追加 --}}
                 </ul>
             </div>
         </div>
