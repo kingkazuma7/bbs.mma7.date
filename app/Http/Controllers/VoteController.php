@@ -26,7 +26,7 @@ class VoteController extends Controller
 
     public function index()
     {
-        $fighters = $this->fighterService->getRandomFighters(2);
+        $fighters = $this->fighterService->getRandomFighters(1);
 
         return view('vote.index', compact('fighters'));
     }

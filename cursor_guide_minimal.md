@@ -93,7 +93,7 @@ php artisan tinker
 以下を実装してください。
 
 1. app/Http/Controllers/VoteController.php
-   - index(): ランダムに 2 人の格闘家を表示
+   - index(): ランダムに 1 人の格闘家を表示
    - show($id): 統計とコメント表示
    - store(): 投票を記録（JSON レスポンス）
    - storeComment(): コメント投稿（JSON レスポンス）
@@ -151,10 +151,10 @@ php artisan route:list
    - Tailwind CSS または Bootstrap 読み込み
 
 2. resources/views/vote/index.blade.php
-   - 左右に 2 人の格闘家表示
-   - 左に「強い」ボタン（AJAX）
-   - 右に「弱い」ボタン（AJAX）
-   - 中央に「次へ」ボタン
+   - 1 人の格闘家を表示
+   - 強いボタン（AJAX）
+   - 弱いボタン（AJAX）
+   - 次へボタン
    - 詳細ページへのリンク
 
 3. resources/views/vote/show.blade.php
