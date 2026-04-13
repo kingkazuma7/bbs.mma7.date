@@ -11,30 +11,20 @@ class Fighter extends Model
 {
     use HasFactory;
     protected $fillable = ['name', 'image_url'];
-    
+
     public function votes()
     {
         return $this->hasMany(Vote::class);
+    }
+
+    // 新規追加: 投票数を取得するアクセサ
+    public function getVotesCountAttribute()
+    {
+        return $this->votes()->count();
     }
     
     public function comments()
     {
         return $this->hasMany(Comment::class);
-    }
-    
-    public function getVoteStats()
-    {
-        $votes = $this->votes()->get();
-        $strong = $votes->where('vote_type', 'strong')->count();
-        $weak = $votes->where('vote_type', 'weak')->count();
-        $total = $votes->count();
-        
-        return [
-            'strong_count' => $strong,
-            'weak_count' => $weak,
-            'total_count' => $total,
-            'strong_percentage' => $total > 0 ? round(($strong / $total) * 100, 1) : 0,
-            'weak_percentage' => $total > 0 ? round(($weak / $total) * 100, 1) : 0,
-        ];
     }
 }

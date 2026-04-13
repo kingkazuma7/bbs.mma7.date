@@ -3,102 +3,63 @@
 namespace App\Http\Controllers;
 
 use App\Models\Fighter;
-use App\Services\FighterService;
-use App\Services\VoteService;
-use App\Services\CommentService;
-use App\Http\Requests\StoreVoteRequest;
-use App\Http\Requests\StoreCommentRequest;
+use App\Models\Vote;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class VoteController extends Controller
 {
-    protected $fighterService;
-    protected $voteService;
-    protected $commentService;
-
-    public function __construct(FighterService $fighterService, VoteService $voteService, CommentService $commentService)
-    {
-        $this->fighterService = $fighterService;
-        $this->voteService = $voteService;
-        $this->commentService = $commentService;
-    }
+    // 既存のindexメソッドなどがあれば残す
 
     public function index()
     {
-        $fighters = $this->fighterService->getRandomFighters(1);
-
+        $fighters = Fighter::all();
         return view('vote.index', compact('fighters'));
     }
 
     public function show($id)
     {
         $fighter = Fighter::with(['votes', 'comments'])->findOrFail($id);
-        $stats = $fighter->getVoteStats();
         $comments = $fighter->comments()->latest()->limit(50)->get();
 
-        return view('vote.show', compact('fighter', 'stats', 'comments'));
+        return view('vote.show', compact('fighter', 'comments'));
     }
 
-    public function store(StoreVoteRequest $request)
+
+    public function store(Request $request, Fighter $fighter)
     {
-        try {
-            $fighter = Fighter::findOrFail($request->fighter_id);
-            $ipAddress = $request->ip();
+        $ipAddress = $request->ip();
 
-            if (!$this->voteService->canVote($fighter, $ipAddress)) {
-                return response()->json(['success' => false, 'message' => '短期間に同じ格闘家への投票はできません。'], 429);
-            }
+        // 24時間以内の重複投票をチェック
+        $lastVote = Vote::where('fighter_id', $fighter->id)
+                        ->where('ip_address', $ipAddress)
+                        ->where('voted_at', '>=', Carbon::now()->subHours(24))
+                        ->first();
 
-            $stats = $this->voteService->vote(
-                $fighter,
-                $request->vote_type,
-                $ipAddress
-            );
-
-            return response()->json([
-                'success' => true,
-                'message' => '投票ありがとうございました',
-                'data' => [
-                    'fighter_id' => $fighter->id,
-                    'vote_type' => $request->vote_type,
-                    'stats' => $stats,
-                ],
-            ]);
-        } catch (\Exception $e) {
-            Log::error('Vote store error: ' . $e->getMessage());
-            return response()->json(['success' => false, 'message' => '投票中にエラーが発生しました。'], 500);
+        if ($lastVote) {
+            return response()->json(['message' => '既に24時間以内にこのファイターに投票しています。'], 403);
         }
-    }
 
-    public function storeComment(StoreCommentRequest $request)
-    {
         try {
-            $fighter = Fighter::findOrFail($request->fighter_id);
-            $ipAddress = $request->ip();
+            DB::beginTransaction();
 
-            if (!$this->commentService->canPostComment($ipAddress)) {
-                return response()->json(['success' => false, 'message' => 'しばらく待ってからコメントしてください。'], 429);
-            }
+            Vote::create([
+                'fighter_id' => $fighter->id,
+                'ip_address' => $ipAddress,
+                'voted_at' => Carbon::now(),
+            ]);
 
-            if (!$this->commentService->validateContent($request->content)) {
-                return response()->json(['success' => false, 'message' => 'コメント内容が不適切です。'], 400);
-            }
+            DB::commit();
 
-            $comment = $this->commentService->postComment(
-                $fighter->id,
-                $request->content,
-                $ipAddress
-            );
-
+            // 投票成功時は最新の投票数を返す
             return response()->json([
-                'success' => true,
-                'message' => 'コメントありがとうございました',
-                'data' => $comment,
+                'message' => '投票が成功しました。',
+                'votes_count' => $fighter->votes()->count(),
             ]);
         } catch (\Exception $e) {
-            Log::error('Comment store error: ' . $e->getMessage());
-            return response()->json(['success' => false, 'message' => 'コメント投稿中にエラーが発生しました。'], 500);
+            DB::rollBack();
+            return response()->json(['message' => '投票に失敗しました。', 'error' => $e->getMessage()], 500);
         }
     }
 }
