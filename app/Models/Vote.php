@@ -13,6 +13,7 @@ class Vote extends Model
         'fighter_id',
         'ip_address',
         'voted_at',
+        'type',
     ];
 
     public function fighter()

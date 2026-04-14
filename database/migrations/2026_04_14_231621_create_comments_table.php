@@ -14,14 +14,10 @@ return new class extends Migration
         Schema::create('comments', function (Blueprint $table) {
             $table->id();
             $table->foreignId('fighter_id')->constrained('fighters')->onDelete('cascade');
+            $table->string('user_name')->nullable();
             $table->text('content');
-            $table->string('ip_address', 45)->nullable();
-            $table->string('user_agent', 500)->nullable();
+            $table->string('ip_address');
             $table->timestamps();
-
-            $table->index('fighter_id', 'idx_comments_fighter_id');
-            $table->index('created_at', 'idx_comments_created_at');
-            $table->index('ip_address', 'idx_comments_ip_address');
         });
     }
 
