@@ -9,5 +9,5 @@ Route::get('/fighter/{id}', [VoteController::class, 'show']);
 
 // API ルート (AJAX)
 Route::post('/fighters/{fighter}/vote', [App\Http\Controllers\VoteController::class, 'store']);
-Route::post('/fighters/{fighter}/comments', [VoteController::class, 'addComment']);
+Route::post('/api/comments', [VoteController::class, 'storeComment']);
 

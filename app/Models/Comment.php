@@ -12,7 +12,7 @@ class Comment extends Model
     use HasFactory;
     use HasIpAddress;
     
-    protected $fillable = ['fighter_id', 'user_name', 'content', 'ip_address', 'user_agent'];
+    protected $fillable = ['fighter_id', 'content', 'ip_address', 'user_agent'];
     
     protected $casts = [
         'created_at' => 'datetime',
