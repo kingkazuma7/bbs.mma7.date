@@ -17,7 +17,15 @@
             <div class="card mb-4">
                 <div class="card-header">投票統計</div>
                 <div class="card-body">
-                    <p><strong>合計投票数:</strong> <span id="total-votes-count">{{ $fighter->votes_count }}</span> 票</p>
+                    <p><strong>強い:</strong> {{ $stats['strong_count'] }} 票 ({{ $stats['strong_percentage'] }}%)</p>
+                    <div class="progress mb-2">
+                        <div class="progress-bar bg-success" role="progressbar" style="width: {{ $stats['strong_percentage'] }}%;" aria-valuenow="{{ $stats['strong_percentage'] }}" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <p><strong>弱い:</strong> {{ $stats['weak_count'] }} 票 ({{ $stats['weak_percentage'] }}%)</p>
+                    <div class="progress mb-4">
+                        <div class="progress-bar bg-danger" role="progressbar" style="width: {{ $stats['weak_percentage'] }}%;" aria-valuenow="{{ $stats['weak_percentage'] }}" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <p><strong>合計投票数:</strong> {{ $stats['total_count'] }} 票</p>
                 </div>
             </div>
 

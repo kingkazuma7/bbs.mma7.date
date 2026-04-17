@@ -13,7 +13,6 @@
         <div class="row justify-content-center">
             <div class="col-md-6">
                 <h2 class="mb-3">{{ $fighter->name }}</h2>
-                <div id="votes-count-{{ $fighter->id }}" class="h4 mb-3">現在の票数: {{ $fighter->votes_count }}</div>
                 @if ($fighter->image_url)
                     <img src="{{ asset('storage/' . $fighter->image_url) }}" class="img-fluid rounded mb-3" alt="{{ $fighter->name }}" style="max-height: 400px; object-fit: cover;">
                 @else
@@ -43,25 +42,25 @@ document.addEventListener('DOMContentLoaded', function () {
             const voteType = this.dataset.voteType;
             const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
-            fetch(`/fighters/${fighterId}/vote`, {
+            fetch('/api/votes', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'X-CSRF-TOKEN': csrfToken
                 },
                 body: JSON.stringify({
-                    fighter_id: fighterId
+                    fighter_id: fighterId,
+                    vote_type: voteType
                 })
             })
             .then(response => response.json())
             .then(data => {
-                if (data.message) {
+                if (data.success) {
+                    alert(data.message);
+                    window.location.reload();
+                } else {
                     alert(data.message);
                 }
-                if (data.votes_count !== undefined) {
-                    document.getElementById(`votes-count-${fighterId}`).innerText = `現在の票数: ${data.votes_count}`;
-                }
-                // window.location.reload(); // 画面リロードは不要
             })
             .catch(error => {
                 console.error('Error:', error);
