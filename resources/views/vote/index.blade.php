@@ -20,14 +20,32 @@
                         <span class="text-muted">画像なし</span>
                     </div>
                 @endif
-                <div class="d-flex justify-content-center mt-4">
+                <div class="d-flex justify-content-center mt-4" id="vote-buttons-section">
                     <button class="btn btn-success btn-lg mx-2 vote-button" data-fighter-id="{{ $fighter->id }}" data-vote-type="strong">強い！</button>
                     <button class="btn btn-danger btn-lg mx-2 vote-button" data-fighter-id="{{ $fighter->id }}" data-vote-type="weak">弱い！</button>
                 </div>
+
+                <div id="vote-result" class="mt-4" style="display: none;">
+                    <div class="card">
+                        <div class="card-header">投票結果</div>
+                        <div class="card-body">
+                            <p><strong>強い:</strong> <span id="strong-count">0</span> 票 (<span id="strong-percentage">0</span>%)</p>
+                            <div class="progress mb-2">
+                                <div id="strong-bar" class="progress-bar bg-success" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                            <p><strong>弱い:</strong> <span id="weak-count">0</span> 票 (<span id="weak-percentage">0</span>%)</p>
+                            <div class="progress mb-4">
+                                <div id="weak-bar" class="progress-bar bg-danger" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemax="100"></div>
+                            </div>
+                            <p><strong>合計投票数:</strong> <span id="total-count">0</span> 票</p>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="mt-4">
                     <button class="btn btn-primary btn-lg" onclick="window.location.reload();">次へ (新しい格闘家)</button>
                 </div>
-                <a href="{{ url('/fighter/' . $fighter->id) }}" class="btn btn-info btn-sm mt-3">統計を見る</a>
+                <a href="{{ url('/fighter/' . $fighter->id) }}" class="btn btn-info btn-sm mt-3">詳細を見る</a>
             </div>
         </div>
     @endif
@@ -56,8 +74,8 @@ document.addEventListener('DOMContentLoaded', function () {
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    alert(data.message);
-                    window.location.reload();
+                    const stats = data.data.stats;
+                    displayVoteResult(stats);
                 } else {
                     alert(data.message);
                 }
@@ -68,6 +86,23 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         });
     });
+
+    function displayVoteResult(stats) {
+        document.getElementById('strong-count').textContent = stats.strong_count;
+        document.getElementById('strong-percentage').textContent = stats.strong_percentage;
+        document.getElementById('strong-bar').style.width = stats.strong_percentage + '%';
+        document.getElementById('strong-bar').setAttribute('aria-valuenow', stats.strong_percentage);
+
+        document.getElementById('weak-count').textContent = stats.weak_count;
+        document.getElementById('weak-percentage').textContent = stats.weak_percentage;
+        document.getElementById('weak-bar').style.width = stats.weak_percentage + '%';
+        document.getElementById('weak-bar').setAttribute('aria-valuenow', stats.weak_percentage);
+
+        document.getElementById('total-count').textContent = stats.total_count;
+
+        document.getElementById('vote-result').style.display = 'block';
+        document.getElementById('vote-buttons-section').style.display = 'none';
+    }
 });
 </script>
 @endsection
