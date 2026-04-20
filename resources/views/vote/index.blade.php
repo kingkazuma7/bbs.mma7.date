@@ -4,17 +4,17 @@
 <div class="container text-center">
     <h1 class="mb-4">この格闘家は強い？弱い？</h1>
 
-    @if ($fighters->isEmpty())
+    @if (!$currentFighter)
         <div class="alert alert-warning" role="alert">
             現在、投票できる格闘家がいません。管理者が格闘家を追加するまでお待ちください。
         </div>
     @else
-        @php $fighter = $fighters->first(); @endphp
+        @php $fighter = $currentFighter; @endphp
         <div class="row justify-content-center">
             <div class="col-md-6">
                 <h2 class="mb-3">{{ $fighter->name }}</h2>
                 @if ($fighter->image_url)
-                    <img src="{{ asset('storage/' . $fighter->image_url) }}" class="img-fluid rounded mb-3" alt="{{ $fighter->name }}" style="max-height: 400px; object-fit: cover;">
+                    <img src="{{ asset('storage/' . $fighter->image_url) }}" class="img-fluid rounded mb-3" alt="{{ $fighter->name }}" style="max-height: 400px; object-fit: contain; object-position: top;">
                 @else
                     <div class="bg-light d-flex align-items-center justify-content-center" style="width: 100%; height: 400px; border-radius: .25rem;">
                         <span class="text-muted">画像なし</span>
@@ -46,6 +46,30 @@
                     <button class="btn btn-primary btn-lg" onclick="window.location.reload();">次へ (新しい格闘家)</button>
                 </div>
                 <a href="{{ url('/fighter/' . $fighter->id) }}" class="btn btn-info btn-sm mt-3">詳細を見る</a>
+            </div>
+        </div>
+
+        <div class="mt-5 pt-4 border-top">
+            <h3 class="mb-4">関連タグ</h3>
+            <div class="row g-3">
+                @foreach ($allFighters as $relatedFighter)
+                    <div class="col-md-4 col-lg-3">
+                        <a href="{{ url('/') }}?id={{ $relatedFighter->id }}" class="text-decoration-none text-dark">
+                            <div class="card h-100 hover-shadow" style="transition: box-shadow 0.3s;">
+                                @if ($relatedFighter->image_url)
+                                    <img src="{{ asset('storage/' . $relatedFighter->image_url) }}" class="card-img-top" alt="{{ $relatedFighter->name }}" style="height: 200px; object-fit: contain; object-position: top;">
+                                @else
+                                    <div class="bg-light d-flex align-items-center justify-content-center" style="height: 200px; border-bottom: 1px solid #dee2e6;">
+                                        <span class="text-muted">画像なし</span>
+                                    </div>
+                                @endif
+                                <div class="card-body text-center">
+                                    <p class="card-text fw-bold">{{ $relatedFighter->name }}</p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                @endforeach
             </div>
         </div>
     @endif

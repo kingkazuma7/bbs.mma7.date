@@ -24,11 +24,20 @@ class VoteController extends Controller
         $this->commentService = $commentService;
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $fighters = $this->fighterService->getRandomFighters(1);
+        if ($request->has('id')) {
+            $currentFighter = Fighter::find($request->id);
+            if (!$currentFighter) {
+                $currentFighter = $this->fighterService->getRandomFighters(1)->first();
+            }
+        } else {
+            $currentFighter = $this->fighterService->getRandomFighters(1)->first();
+        }
 
-        return view('vote.index', compact('fighters'));
+        $allFighters = Fighter::all();
+
+        return view('vote.index', compact('currentFighter', 'allFighters'));
     }
 
     public function show($id)
