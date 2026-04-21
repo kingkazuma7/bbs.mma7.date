@@ -7,6 +7,9 @@ use App\Http\Controllers\VoteController;
 Route::get('/', [VoteController::class, 'index']);
 Route::get('/fighter/{id}', [VoteController::class, 'show']);
 
+// 検索
+Route::get('/search', [VoteController::class, 'search']);
+
 // API ルート (AJAX)
 Route::post('/api/votes', [VoteController::class, 'store']);
 Route::post('/api/comments', [VoteController::class, 'storeComment']);

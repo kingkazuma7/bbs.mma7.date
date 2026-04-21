@@ -110,4 +110,16 @@ class VoteController extends Controller
             return response()->json(['success' => false, 'message' => 'コメント投稿中にエラーが発生しました。'], 500);
         }
     }
+
+    public function search(Request $request)
+    {
+        $query = $request->input('q', '');
+        $results = [];
+
+        if (!empty($query)) {
+            $results = Fighter::where('name', 'like', '%' . $query . '%')->get();
+        }
+
+        return view('vote.search', compact('query', 'results'));
+    }
 }

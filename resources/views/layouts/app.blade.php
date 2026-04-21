@@ -13,6 +13,7 @@
 
     <!-- Styles -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     @if(App::environment() !== 'production')
         @vite('resources/scss/app.scss')
     @else
@@ -35,6 +36,12 @@
                         <a class="nav-link" href="{{ url('/') }}">投票ページ</a>
                     </li>
                 </ul>
+                <form class="d-flex ms-auto" action="{{ url('/search') }}" method="GET">
+                    <input class="form-control me-2" type="text" name="q" id="search_form" value="{{ request('q') }}" placeholder="人物名・グループ名" autocomplete="off">
+                    <button class="btn btn-success" type="submit" id="search_btn" style="white-space: nowrap;">
+                        <i class="fa fa-search"></i> 検索
+                    </button>
+                </form>
             </div>
         </div>
     </nav>
