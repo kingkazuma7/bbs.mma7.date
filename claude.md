@@ -1,2 +1,3 @@
 - ベンチマークとするサイトは以下です。
   - https://suki-kira.com/
+- ユーザーの入力が曖昧な場合は、askuserquestionを積極的に活用してください
