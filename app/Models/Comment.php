@@ -12,8 +12,10 @@ class Comment extends Model
     use HasFactory;
     use HasIpAddress;
     
-    protected $fillable = ['fighter_id', 'content', 'ip_address', 'user_agent'];
-    
+    protected $fillable = ['fighter_id', 'content', 'ip_address', 'user_agent', 'vote_type', 'good_count', 'bad_count'];
+
+    protected $appends = ['vote_label'];
+
     protected $casts = [
         'created_at' => 'datetime',
     ];
@@ -21,6 +23,20 @@ class Comment extends Model
     public function fighter()
     {
         return $this->belongsTo(Fighter::class);
+    }
+
+    public function getVoteLabel(): string
+    {
+        return match ($this->vote_type) {
+            'strong' => '好き派',
+            'weak' => '嫌い派',
+            default => '匿名',
+        };
+    }
+
+    public function getVoteLabelAttribute(): string
+    {
+        return $this->getVoteLabel();
     }
     
     protected static function boot()

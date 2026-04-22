@@ -24,6 +24,7 @@ class StoreCommentRequest extends FormRequest
         return [
             'fighter_id' => ['required', 'integer', 'exists:fighters,id'],
             'content' => ['required', 'string', 'min:3', 'max:500'],
+            'vote_type' => ['nullable', 'in:strong,weak'],
         ];
     }
 }

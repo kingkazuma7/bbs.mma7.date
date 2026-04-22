@@ -40,6 +40,72 @@
                             <p><strong>合計投票数:</strong> <span id="total-count">0</span> 票</p>
                         </div>
                     </div>
+
+                    <!-- 掲示板セクション -->
+                    <div id="bbs-section" class="mt-4">
+                        <!-- コメント一覧 -->
+                        <div class="card mb-4">
+                            <div class="card-header">掲示板 ({{ $comments->total() ?? 0 }}件)</div>
+                            <div class="card-body">
+                                @if ($comments && $comments->count() > 0)
+                                    <ul class="list-group list-group-flush">
+                                        @foreach ($comments as $comment)
+                                            <li class="list-group-item py-3">
+                                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                                    <small class="text-muted">
+                                                        <strong>{{ $comment->id }}. 匿名@{{ $comment->vote_label }}</strong>
+                                                        {{ $comment->created_at->format('m-d H:i') }}
+                                                    </small>
+                                                    <small>
+                                                        <a href="#" class="text-muted text-decoration-none">[通報]</a>
+                                                        <a href="#" class="text-muted text-decoration-none">[非表示]</a>
+                                                        <a href="#" class="text-muted text-decoration-none">[返信]</a>
+                                                    </small>
+                                                </div>
+                                                <p class="mb-2">{{ $comment->content }}</p>
+                                                <div>
+                                                    <button class="btn btn-sm btn-outline-secondary good-btn" data-comment-id="{{ $comment->id }}">
+                                                        <i class="fas fa-thumbs-up"></i> <span class="good-count">{{ $comment->good_count ?? 0 }}</span>
+                                                    </button>
+                                                    <button class="btn btn-sm btn-outline-secondary bad-btn ms-2" data-comment-id="{{ $comment->id }}">
+                                                        <i class="fas fa-thumbs-down"></i> <span class="bad-count">{{ $comment->bad_count ?? 0 }}</span>
+                                                    </button>
+                                                </div>
+                                            </li>
+                                        @endforeach
+                                    </ul>
+
+                                    <!-- ページネーション -->
+                                    @if ($comments->hasPages())
+                                        <div class="mt-3">
+                                            {{ $comments->appends(['id' => $currentFighter->id, 'show_bbs' => '1'])->links() }}
+                                        </div>
+                                    @endif
+                                @else
+                                    <p class="text-muted">まだコメントはありません。</p>
+                                @endif
+                            </div>
+                        </div>
+
+                        <!-- コメント投稿フォーム -->
+                        <div class="card">
+                            <div class="card-header">コメントを投稿する</div>
+                            <div class="card-body">
+                                <form id="comment-form">
+                                    <div class="mb-3">
+                                        <select class="form-select" id="vote-type" name="vote_type" required>
+                                            <option value="strong">強い派</option>
+                                            <option value="weak">弱い派</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <textarea class="form-control" id="comment-content" name="content" rows="3" placeholder="匿名でコメントを書く" required></textarea>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">投稿</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="mt-4">
@@ -77,11 +143,13 @@
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     const voteButtons = document.querySelectorAll('.vote-button');
+    const fighterId = voteButtons.length > 0 ? voteButtons[0].dataset.fighterId : null;
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
     voteButtons.forEach(button => {
         button.addEventListener('click', function () {
             const fighterId = this.dataset.fighterId;
             const voteType = this.dataset.voteType;
-            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
             fetch('/api/votes', {
                 method: 'POST',
@@ -101,6 +169,13 @@ document.addEventListener('DOMContentLoaded', function () {
                     displayVoteResult(stats);
                 } else {
                     alert(data.message);
+                    // 投票失敗時も掲示板を表示
+                    document.getElementById('vote-result').style.display = 'block';
+                    document.getElementById('vote-buttons-section').style.display = 'none';
+                    const bbsSection = document.getElementById('bbs-section');
+                    if (bbsSection) {
+                        bbsSection.scrollIntoView({ behavior: 'smooth' });
+                    }
                 }
             })
             .catch(error => {
@@ -125,6 +200,98 @@ document.addEventListener('DOMContentLoaded', function () {
 
         document.getElementById('vote-result').style.display = 'block';
         document.getElementById('vote-buttons-section').style.display = 'none';
+
+        // スクロールしてコメントセクションを表示
+        const bbsSection = document.getElementById('bbs-section');
+        if (bbsSection) {
+            bbsSection.scrollIntoView({ behavior: 'smooth' });
+        }
+    }
+
+    // コメント投稿フォーム処理
+    const commentForm = document.getElementById('comment-form');
+    if (commentForm) {
+        commentForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const content = document.getElementById('comment-content').value;
+            const voteType = document.getElementById('vote-type').value;
+
+            fetch('/api/comments', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken
+                },
+                body: JSON.stringify({
+                    fighter_id: fighterId,
+                    content: content,
+                    vote_type: voteType
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(data.message);
+                    location.href = `/?id=${fighterId}&show_bbs=1`;
+                } else {
+                    alert(data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('コメント投稿中にエラーが発生しました。');
+            });
+        });
+    }
+
+    // good/bad ボタン処理
+    document.querySelectorAll('.good-btn, .bad-btn').forEach(button => {
+        button.addEventListener('click', function (e) {
+            e.preventDefault();
+
+            const commentId = this.dataset.commentId;
+            const type = this.classList.contains('good-btn') ? 'good' : 'bad';
+
+            fetch(`/api/comment-reactions/${commentId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken
+                },
+                body: JSON.stringify({
+                    type: type
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // カウントを更新
+                    const button = this;
+                    if (type === 'good') {
+                        button.querySelector('.good-count').textContent = data.data.good_count;
+                    } else {
+                        button.querySelector('.bad-count').textContent = data.data.bad_count;
+                    }
+                } else {
+                    alert(data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('リアクション記録中にエラーが発生しました。');
+            });
+        });
+    });
+
+    // show_bbs パラメータがある場合、投票結果を最初から表示
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.has('show_bbs')) {
+        const voteResult = document.getElementById('vote-result');
+        if (voteResult) {
+            voteResult.style.display = 'block';
+            document.getElementById('vote-buttons-section').style.display = 'none';
+        }
     }
 });
 </script>

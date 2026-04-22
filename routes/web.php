@@ -13,4 +13,5 @@ Route::get('/search', [VoteController::class, 'search']);
 // API ルート (AJAX)
 Route::post('/api/votes', [VoteController::class, 'store']);
 Route::post('/api/comments', [VoteController::class, 'storeComment']);
+Route::post('/api/comment-reactions/{comment}', [VoteController::class, 'storeReaction']);
 

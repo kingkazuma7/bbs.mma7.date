@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Fighter;
+use App\Models\Comment;
 use App\Services\FighterService;
 use App\Services\VoteService;
 use App\Services\CommentService;
@@ -37,13 +38,15 @@ class VoteController extends Controller
         }
 
         $allFighters = Fighter::all();
+        $comments = $currentFighter ? $currentFighter->comments()->latest()->paginate(10) : collect();
+        $showBbs = $request->has('show_bbs');
 
         $seoData = new SEOData(
             title: 'この格闘家は強い？弱い？',
             description: '格闘家の「強い・弱い」を投票で決める匿名掲示板。みんなの本音をチェック！',
         );
 
-        return view('vote.index', compact('currentFighter', 'allFighters', 'seoData'));
+        return view('vote.index', compact('currentFighter', 'allFighters', 'comments', 'showBbs', 'seoData'));
     }
 
     public function show($id)
@@ -105,7 +108,8 @@ class VoteController extends Controller
             $comment = $this->commentService->postComment(
                 $fighter->id,
                 $request->content,
-                $ipAddress
+                $ipAddress,
+                $request->vote_type
             );
 
             return response()->json([
@@ -116,6 +120,35 @@ class VoteController extends Controller
         } catch (\Exception $e) {
             Log::error('Comment store error: ' . $e->getMessage());
             return response()->json(['success' => false, 'message' => 'コメント投稿中にエラーが発生しました。'], 500);
+        }
+    }
+
+    public function storeReaction(Request $request, Comment $comment)
+    {
+        try {
+            $type = $request->input('type');
+
+            if (!in_array($type, ['good', 'bad'])) {
+                return response()->json(['success' => false, 'message' => '無効なリアクションタイプです。'], 400);
+            }
+
+            if ($type === 'good') {
+                $comment->increment('good_count');
+            } else {
+                $comment->increment('bad_count');
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => 'リアクションを記録しました',
+                'data' => [
+                    'good_count' => $comment->good_count,
+                    'bad_count' => $comment->bad_count,
+                ],
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Comment reaction store error: ' . $e->getMessage());
+            return response()->json(['success' => false, 'message' => 'リアクション記録中にエラーが発生しました。'], 500);
         }
     }
 

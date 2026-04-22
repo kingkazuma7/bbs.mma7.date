@@ -10,13 +10,14 @@ class CommentService
     /**
      * コメントを投稿
      */
-    public function postComment(int $fighterId, string $content, string $ipAddress): Comment
+    public function postComment(int $fighterId, string $content, string $ipAddress, ?string $voteType = null): Comment
     {
         $comment = Comment::create([
             'fighter_id' => $fighterId,
             'content' => $content,
             'ip_address' => $ipAddress,
             'user_agent' => request()->userAgent(),
+            'vote_type' => $voteType,
         ]);
 
         return $comment;
