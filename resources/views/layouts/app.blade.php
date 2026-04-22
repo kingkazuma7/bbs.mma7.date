@@ -5,7 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>ガチ格 ─格闘家の「強い・弱い」本音掲示板─</title>
+    @if(isset($seoModel))
+        {!! seo()->for($seoModel) !!}
+    @elseif(isset($seoData))
+        {!! seo()->for($seoData) !!}
+    @else
+        {!! seo() !!}
+    @endif
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">

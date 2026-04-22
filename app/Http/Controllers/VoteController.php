@@ -10,6 +10,7 @@ use App\Http\Requests\StoreVoteRequest;
 use App\Http\Requests\StoreCommentRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use RalphJSmit\Laravel\SEO\Support\SEOData;
 
 class VoteController extends Controller
 {
@@ -37,7 +38,12 @@ class VoteController extends Controller
 
         $allFighters = Fighter::all();
 
-        return view('vote.index', compact('currentFighter', 'allFighters'));
+        $seoData = new SEOData(
+            title: 'この格闘家は強い？弱い？',
+            description: '格闘家の「強い・弱い」を投票で決める匿名掲示板。みんなの本音をチェック！',
+        );
+
+        return view('vote.index', compact('currentFighter', 'allFighters', 'seoData'));
     }
 
     public function show($id)
@@ -46,7 +52,9 @@ class VoteController extends Controller
         $stats = $fighter->getVoteStats();
         $comments = $fighter->comments()->latest()->limit(50)->get();
 
-        return view('vote.show', compact('fighter', 'stats', 'comments'));
+        $seoModel = $fighter;
+
+        return view('vote.show', compact('fighter', 'stats', 'comments', 'seoModel'));
     }
 
     public function store(StoreVoteRequest $request)
@@ -118,8 +126,17 @@ class VoteController extends Controller
 
         if (!empty($query)) {
             $results = Fighter::where('name', 'like', '%' . $query . '%')->get();
+            $seoData = new SEOData(
+                title: "「{$query}」の検索結果",
+                description: "「{$query}」の検索結果。格闘家の投票結果をチェック！",
+            );
+        } else {
+            $seoData = new SEOData(
+                title: '検索',
+                description: '格闘家を検索します。',
+            );
         }
 
-        return view('vote.search', compact('query', 'results'));
+        return view('vote.search', compact('query', 'results', 'seoData'));
     }
 }
