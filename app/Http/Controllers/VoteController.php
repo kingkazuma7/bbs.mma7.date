@@ -37,7 +37,7 @@ class VoteController extends Controller
             $currentFighter = $this->fighterService->getRandomFighters(1)->first();
         }
 
-        $allFighters = Fighter::all();
+        $allFighters = Fighter::inRandomOrder()->take(6)->get();
         $comments = $currentFighter ? $currentFighter->comments()->latest()->paginate(10) : collect();
         $showBbs = $request->has('show_bbs');
 

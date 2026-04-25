@@ -116,20 +116,20 @@
 
         <div class="mt-5 pt-4 border-top">
             <h3 class="mb-4">関連タグ</h3>
-            <div class="row g-3">
+            <div class="row g-2 g-md-3">
                 @foreach ($allFighters as $relatedFighter)
-                    <div class="col-md-4 col-lg-3">
+                    <div class="col-4 col-sm-4 col-md-3 col-lg-2">
                         <a href="{{ url('/') }}?id={{ $relatedFighter->id }}" class="text-decoration-none text-dark">
                             <div class="card h-100 hover-shadow" style="transition: box-shadow 0.3s;">
                                 @if ($relatedFighter->image_path)
-                                    <img src="{{ $relatedFighter->image_path }}" class="card-img-top" alt="{{ $relatedFighter->name }}" style="height: 200px; object-fit: contain; object-position: top;">
+                                    <img src="{{ $relatedFighter->image_path }}" class="card-img-top" alt="{{ $relatedFighter->name }}" style="height: 100px; object-fit: contain; object-position: top;">
                                 @else
-                                    <div class="bg-light d-flex align-items-center justify-content-center" style="height: 200px; border-bottom: 1px solid #dee2e6;">
-                                        <span class="text-muted">画像なし</span>
+                                    <div class="bg-light d-flex align-items-center justify-content-center" style="height: 100px; border-bottom: 1px solid #dee2e6;">
+                                        <small class="text-muted">画像なし</small>
                                     </div>
                                 @endif
-                                <div class="card-body text-center">
-                                    <p class="card-text fw-bold">{{ $relatedFighter->name }}</p>
+                                <div class="card-body p-2 text-center">
+                                    <p class="card-text fw-bold small mb-0 text-truncate">{{ $relatedFighter->name }}</p>
                                 </div>
                             </div>
                         </a>
