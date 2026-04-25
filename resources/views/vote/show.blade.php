@@ -6,8 +6,8 @@
         <div class="col-md-8 offset-md-2">
             <h1 class="mb-4">{{ $fighter->name }} の詳細</h1>
 
-            @if ($fighter->image_url)
-                <img src="{{ asset('storage/' . $fighter->image_url) }}" class="img-fluid rounded mb-4" alt="{{ $fighter->name }}" style="max-height: 400px; object-fit: contain; object-position: top;">
+            @if ($fighter->image_path)
+                <img src="{{ $fighter->image_path }}" class="img-fluid rounded mb-4" alt="{{ $fighter->name }}" style="max-height: 400px; object-fit: contain; object-position: top;">
             @else
                 <div class="bg-light d-flex align-items-center justify-content-center mb-4" style="width: 100%; height: 400px; border-radius: .25rem;">
                     <span class="text-muted">画像なし</span>

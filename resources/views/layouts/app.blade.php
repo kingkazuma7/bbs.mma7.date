@@ -38,10 +38,25 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url('/') }}">投票ページ</a>
-                    </li>
+                    @auth
+                        @if(auth()->user()->is_admin)
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url('/admin/fighters') }}">選手管理</a>
+                            </li>
+                        @endif
+                    @endauth
                 </ul>
+                <div class="ms-auto">
+                    @auth
+                        <span class="navbar-text me-3">{{ auth()->user()->name }} さん</span>
+                        <form action="{{ route('logout') }}" method="POST" class="d-inline">
+                            @csrf
+                            <button type="submit" class="btn btn-outline-danger btn-sm">ログアウト</button>
+                        </form>
+                    @else
+                        <a href="{{ url('/login') }}" class="btn btn-primary btn-sm">ログイン</a>
+                    @endauth
+                </div>
                 <form class="d-flex ms-auto" action="{{ url('/search') }}" method="GET">
                     <input class="form-control me-2" type="text" name="q" id="search_form" value="{{ request('q') }}" placeholder="人物名・グループ名" autocomplete="off">
                     <button class="btn btn-success" type="submit" id="search_btn" style="white-space: nowrap;">

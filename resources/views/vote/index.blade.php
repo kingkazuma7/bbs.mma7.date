@@ -13,8 +13,8 @@
         <div class="row justify-content-center">
             <div class="col-md-6">
                 <h2 class="mb-3">{{ $fighter->name }}</h2>
-                @if ($fighter->image_url)
-                    <img src="{{ asset('storage/' . $fighter->image_url) }}" class="img-fluid rounded mb-3" alt="{{ $fighter->name }}" style="max-height: 400px; object-fit: contain; object-position: top;">
+                @if ($fighter->image_path)
+                    <img src="{{ $fighter->image_path }}" class="img-fluid rounded mb-3" alt="{{ $fighter->name }}" style="max-height: 400px; object-fit: contain; object-position: top;">
                 @else
                     <div class="bg-light d-flex align-items-center justify-content-center" style="width: 100%; height: 400px; border-radius: .25rem;">
                         <span class="text-muted">画像なし</span>
@@ -121,8 +121,8 @@
                     <div class="col-md-4 col-lg-3">
                         <a href="{{ url('/') }}?id={{ $relatedFighter->id }}" class="text-decoration-none text-dark">
                             <div class="card h-100 hover-shadow" style="transition: box-shadow 0.3s;">
-                                @if ($relatedFighter->image_url)
-                                    <img src="{{ asset('storage/' . $relatedFighter->image_url) }}" class="card-img-top" alt="{{ $relatedFighter->name }}" style="height: 200px; object-fit: contain; object-position: top;">
+                                @if ($relatedFighter->image_path)
+                                    <img src="{{ $relatedFighter->image_path }}" class="card-img-top" alt="{{ $relatedFighter->name }}" style="height: 200px; object-fit: contain; object-position: top;">
                                 @else
                                     <div class="bg-light d-flex align-items-center justify-content-center" style="height: 200px; border-bottom: 1px solid #dee2e6;">
                                         <span class="text-muted">画像なし</span>

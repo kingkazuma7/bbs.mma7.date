@@ -40,12 +40,30 @@ class Fighter extends Model
         ];
     }
 
+    public function getImagePathAttribute()
+    {
+        if (!$this->image_url) {
+            return null;
+        }
+
+        // 既に fighters/ を含んでいる場合は、そのまま使用
+        if (str_starts_with($this->image_url, 'fighters/')) {
+            $path = asset('storage/' . $this->image_url);
+        } else {
+            // fighters/ を含んでいない場合は、プレフィックスを追加
+            $path = asset('storage/fighters/' . $this->image_url);
+        }
+
+        // キャッシュバスターを追加（updated_atをパラメータに）
+        return $path . '?v=' . $this->updated_at->timestamp;
+    }
+
     public function getDynamicSEOData(): SEOData
     {
         return SEOData::make([
             'title' => $this->name,
             'description' => "{$this->name}の強い・弱い投票結果。みんなの本音をチェック！",
-            'image' => $this->image_url ? asset('storage/' . $this->image_url) : null,
+            'image' => $this->image_path,
         ]);
     }
 }
