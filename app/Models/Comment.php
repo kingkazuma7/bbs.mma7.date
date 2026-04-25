@@ -14,7 +14,7 @@ class Comment extends Model
     
     protected $fillable = ['fighter_id', 'content', 'ip_address', 'user_agent', 'vote_type', 'good_count', 'bad_count'];
 
-    protected $appends = ['vote_label'];
+    protected $appends = ['vote_label', 'hash_id'];
 
     protected $casts = [
         'created_at' => 'datetime',
@@ -37,6 +37,11 @@ class Comment extends Model
     public function getVoteLabelAttribute(): string
     {
         return $this->getVoteLabel();
+    }
+
+    public function getHashIdAttribute(): string
+    {
+        return substr(hash('sha256', (string) $this->id), 0, 8);
     }
     
     protected static function boot()

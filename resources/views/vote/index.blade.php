@@ -53,7 +53,7 @@
                                             <li class="list-group-item py-3">
                                                 <div class="d-flex justify-content-between align-items-start mb-2">
                                                     <small class="text-muted">
-                                                        <strong>{{ $comment->id }}. 匿名@{{ $comment->vote_label }}</strong>
+                                                        <strong>#{{ $comment->hash_id }} 匿名</strong>
                                                         {{ $comment->created_at->format('m-d H:i') }}
                                                     </small>
                                                     <small>
