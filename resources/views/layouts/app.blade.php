@@ -57,7 +57,7 @@
                         @endif
                     @endauth
                 </ul>
-                <div class="ms-auto">
+                <div class="d-flex ms-auto align-items-center gap-2">
                     @auth
                         <span class="navbar-text me-3">{{ auth()->user()->name }} さん</span>
                         <form action="{{ route('logout') }}" method="POST" class="d-inline">
@@ -67,8 +67,7 @@
                     @else
                         <a href="{{ url('/login') }}" class="btn btn-primary btn-sm">ログイン</a>
                     @endauth
-                </div>
-                <form class="d-flex ms-auto" action="{{ url('/search') }}" method="GET">
+                    <form class="d-flex" action="{{ url('/search') }}" method="GET">
                     <input class="form-control me-2" type="text" name="q" id="search_form" value="{{ request('q') }}" placeholder="人物名・グループ名" autocomplete="off">
                     <button class="btn btn-success" type="submit" id="search_btn" style="white-space: nowrap;">
                         <i class="fa fa-search"></i> 検索
