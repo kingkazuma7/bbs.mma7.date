@@ -6,6 +6,16 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="google-site-verification" content="6SNLD4Z1k89AAcyohUG5cpxsqiCxqkX12VetSTQVdIo" />
 
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-5VMVNQVCFB"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-5VMVNQVCFB');
+    </script>
+
     @if(isset($seoModel))
         {!! seo()->for($seoModel) !!}
     @elseif(isset($seoData))
