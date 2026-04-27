@@ -108,9 +108,6 @@
                     </div>
                 </div>
 
-                <div class="mt-4">
-                    <button class="btn btn-primary btn-lg" onclick="window.location.reload();">次へ (新しい格闘家)</button>
-                </div>
             </div>
         </div>
 
