@@ -34,18 +34,12 @@ class FighterSeeder extends Seeder
                     continue;
                 }
 
-                // 既に同じ名前の選手がいないかチェック
-                $exists = Fighter::where('name', $row[0])->exists();
-
-                if (!$exists) {
-                    Fighter::create([
-                        'name' => $row[0],
-                        'image_url' => $row[1],
-                    ]);
-                    $this->command->info('登録完了: ' . $row[0]);
-                } else {
-                    $this->command->warn('スキップ（既に存在）: ' . $row[0]);
-                }
+                // 名前をキーにして、存在すれば更新、なければ作成
+                Fighter::updateOrCreate(
+                    ['name' => $row[0]],
+                    ['image_url' => $row[1]]
+                );
+                $this->command->info('処理完了: ' . $row[0]);
             }
 
             fclose($handle);
