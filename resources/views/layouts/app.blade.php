@@ -37,7 +37,7 @@
     @else
         <link href="{{ asset('build/assets/app-23NSH9ET.css') }}" rel="stylesheet">
     @endif
-    <script src="{{ asset('js/main.js') }}" defer></script>
+    <script src="{{ asset('js/main.js') }}?v={{ time() }}" defer></script>
 </head>
 <body class="d-flex flex-column min-vh-100">
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
