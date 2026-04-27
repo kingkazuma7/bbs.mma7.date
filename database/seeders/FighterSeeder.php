@@ -13,24 +13,43 @@ class FighterSeeder extends Seeder
      */
     public function run(): void
     {
-        Fighter::create([
-            'name' => '那須川天心',
-            'image_url' => 'fighters/nasukawa_tenshin.jpg',
-        ]);
+        // CSVファイルのパス
+        $csvFile = database_path('seeders/data/fighters.csv');
 
-        Fighter::create([
-            'name' => '武尊',
-            'image_url' => 'fighters/takeru.jpg',
-        ]);
+        // CSVファイルが存在するかチェック
+        if (!file_exists($csvFile)) {
+            $this->command->error('fighters.csv ファイルが見つかりません: ' . $csvFile);
+            return;
+        }
 
-        Fighter::create([
-            'name' => '井上尚弥',
-            'image_url' => 'fighters/inoue_naoya.jpg',
-        ]);
+        // CSVを開く
+        if (($handle = fopen($csvFile, 'r')) !== false) {
+            // ヘッダー行をスキップ
+            fgetcsv($handle, 1000, ',');
 
-        Fighter::create([
-            'name' => '朝倉未来',
-            'image_url' => 'fighters/asakura_mikuru.jpg',
-        ]);
+            // CSVの各行を読み込む
+            while (($row = fgetcsv($handle, 1000, ',')) !== false) {
+                // 空行をスキップ
+                if (empty($row[0])) {
+                    continue;
+                }
+
+                // 既に同じ名前の選手がいないかチェック
+                $exists = Fighter::where('name', $row[0])->exists();
+
+                if (!$exists) {
+                    Fighter::create([
+                        'name' => $row[0],
+                        'image_url' => $row[1],
+                    ]);
+                    $this->command->info('登録完了: ' . $row[0]);
+                } else {
+                    $this->command->warn('スキップ（既に存在）: ' . $row[0]);
+                }
+            }
+
+            fclose($handle);
+            $this->command->info('選手の登録完了！');
+        }
     }
 }
