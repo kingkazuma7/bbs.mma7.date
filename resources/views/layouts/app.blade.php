@@ -68,13 +68,29 @@
                     @else
                         <a href="{{ url('/login') }}" class="btn btn-primary btn-sm">ログイン</a>
                     @endauth
-                    <form class="d-flex" action="{{ url('/search') }}" method="GET">
-                    <input class="form-control me-2" type="text" name="q" id="search_form" value="{{ request('q') }}" placeholder="人物名・グループ名" autocomplete="off">
-                    <button class="btn btn-success" type="submit" id="search_btn" style="white-space: nowrap;">
-                        <i class="fa fa-search"></i> 検索
-                    </button>
-                </form>
-            </div>
+                    <div class="position-relative">
+                        <form class="d-flex" action="{{ url('/search') }}" method="GET">
+                            <input class="form-control me-2" type="text" name="q" id="search_form" value="{{ request('q') }}" placeholder="人物名・グループ名" autocomplete="off">
+                            <button class="btn btn-success" type="submit" id="search_btn" style="white-space: nowrap;">
+                                <i class="fa fa-search"></i> 検索
+                            </button>
+                        </form>
+                        <!-- 検索おすすめ（レコメンド）ポップアップ -->
+                        <div id="search-recommendation" class="dropdown-menu w-100 shadow-sm mt-1" style="display: none; position: absolute; z-index: 1050; border-radius: 8px;">
+                            <div class="px-3 py-2 text-muted fw-bold border-bottom" style="font-size: 0.85rem; background-color: #f8f9fa; border-top-left-radius: 8px; border-top-right-radius: 8px;">
+                                <i class="fas fa-fire text-danger me-1"></i> トレンドキーワード
+                            </div>
+                            <!-- TODO: データ集まり次第、Controller等から動的に人気キーワードを渡す仕様に変更する -->
+                            <ul class="list-unstyled mb-0 pb-1" style="padding-left: 0; margin: 0;">
+                                <li style="list-style: none;"><a href="{{ url('/search?q=朝倉未来') }}" class="dropdown-item py-2"><i class="fas fa-search text-muted me-2" style="font-size: 0.8rem;"></i>朝倉未来</a></li>
+                                <li style="list-style: none;"><a href="{{ url('/search?q=井上尚弥') }}" class="dropdown-item py-2"><i class="fas fa-search text-muted me-2" style="font-size: 0.8rem;"></i>井上尚弥</a></li>
+                                <li style="list-style: none;"><a href="{{ url('/search?q=平本蓮') }}" class="dropdown-item py-2"><i class="fas fa-search text-muted me-2" style="font-size: 0.8rem;"></i>平本蓮</a></li>
+                                <li style="list-style: none;"><a href="{{ url('/search?q=堀口恭司') }}" class="dropdown-item py-2"><i class="fas fa-search text-muted me-2" style="font-size: 0.8rem;"></i>堀口恭司</a></li>
+                                <li style="list-style: none;"><a href="{{ url('/search?q=朝倉海') }}" class="dropdown-item py-2"><i class="fas fa-search text-muted me-2" style="font-size: 0.8rem;"></i>朝倉海</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
         </div>
     </nav>
 
