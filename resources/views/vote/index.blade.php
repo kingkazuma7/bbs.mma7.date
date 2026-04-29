@@ -68,8 +68,8 @@
                             <div class="mt-3 text-center">
                                 <p class="small text-muted mb-2">結果をシェアしよう！</p>
                                 <div class="d-flex justify-content-center gap-2 flex-wrap">
-                                    <a id="share-x" href="#" target="_blank" class="btn btn-dark btn-sm">
-                                        <i class="fab fa-x-twitter"></i> X
+                                    <a id="share-x" href="#" target="_blank" class="btn btn-sm text-white" style="background-color: #1DA1F2; border-color: #1DA1F2;">
+                                        <i class="fab fa-twitter"></i> X
                                     </a>
                                     <a id="share-line" href="#" target="_blank" class="btn btn-success btn-sm" style="background-color: #06C755; border-color: #06C755;">
                                         <i class="fab fa-line"></i> LINE
