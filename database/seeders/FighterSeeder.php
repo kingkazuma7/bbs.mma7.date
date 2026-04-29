@@ -35,9 +35,14 @@ class FighterSeeder extends Seeder
                 }
 
                 // 名前をキーにして、存在すれば更新、なければ作成
+                $categories = !empty($row[2]) ? array_map('trim', explode(',', $row[2])) : [];
+                
                 Fighter::updateOrCreate(
                     ['name' => $row[0]],
-                    ['image_url' => $row[1]]
+                    [
+                        'image_url' => $row[1],
+                        'weight_class' => $categories
+                    ]
                 );
                 $this->command->info('処理完了: ' . $row[0]);
             }

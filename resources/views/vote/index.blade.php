@@ -31,7 +31,16 @@
         @php $fighter = $currentFighter; @endphp
         <div class="row justify-content-center">
             <article class="col-md-6">
-                <h2 class="mb-3">{{ $fighter->name }}</h2>
+                <h2 class="mb-1">{{ $fighter->name }}</h2>
+                <div class="mb-3 d-flex flex-wrap gap-1 justify-content-center">
+                    @if($fighter->weight_class && count($fighter->weight_class) > 0)
+                        @foreach($fighter->weight_class as $cat)
+                            <span class="badge rounded-pill bg-light text-secondary border fw-normal">{{ $cat }}</span>
+                        @endforeach
+                    @else
+                        <span class="badge rounded-pill bg-light text-secondary border fw-normal">階級未設定</span>
+                    @endif
+                </div>
                 @if ($fighter->image_path)
                     <img src="{{ $fighter->image_path }}" class="img-fluid rounded mb-3" alt="{{ $fighter->name }}" style="max-height: 400px; object-fit: contain; object-position: top;">
                 @else

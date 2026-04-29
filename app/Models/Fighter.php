@@ -12,7 +12,11 @@ use RalphJSmit\Laravel\SEO\Support\HasSEO;
 class Fighter extends Model
 {
     use HasFactory, HasSEO;
-    protected $fillable = ['name', 'image_url'];
+    protected $fillable = ['name', 'image_url', 'weight_class'];
+    
+    protected $casts = [
+        'weight_class' => 'array',
+    ];
     
     public function votes()
     {
