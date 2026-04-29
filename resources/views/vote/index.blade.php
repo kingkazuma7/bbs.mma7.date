@@ -1,8 +1,37 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container text-center">
-    <h1 class="h2 mb-4">この格闘家は強い？弱い？</h1>
+@if($isTopPage)
+    <div class="container">
+        <!-- トップページリードブロック -->
+        <div class="row align-items-center mb-5 text-start">
+            <div class="col-md-7 mb-4 mb-md-0">
+                <h2 class="display-4 fw-bold mb-4">あの格闘家って<br>強い？弱い？</h2>
+                <p class="h4 mb-3 text-secondary">みんなの「ホンネ」が集まる場所。</p>
+                <p class="text-muted lead">忖度なし。匿名だから言える、格闘家へのリアルな評価をチェックしよう。</p>
+            </div>
+            <div class="col-10 col-md-5 mx-auto me-md-0">
+                <div class="bg-light rounded shadow-sm d-flex align-items-center justify-content-center overflow-hidden">
+                    <img src="{{ asset('storage/top_hero.jpg') }}" class="img-fluid w-100" alt="Gachikaku Hero">
+                </div>
+            </div>
+        </div>
+
+        <!-- 選手一覧ブロック -->
+        <div class="mt-5 pt-4">
+            <h3 class="h5 mb-4 fw-bold text-secondary"><i class="fas fa-fire text-danger me-2"></i>話題の格闘家をチェック</h3>
+            <div class="d-flex flex-wrap gap-2 justify-content-center justify-content-md-start">
+                @foreach($topFighters as $topFighter)
+                    <a href="{{ url('/') }}?id={{ $topFighter->id }}" class="btn btn-light border rounded-pill px-4 py-2 hover-shadow transition-all" style="font-weight: 600;">
+                        <span class="text-primary me-1">#</span>{{ $topFighter->name }}
+                    </a>
+                @endforeach
+            </div>
+        </div>
+    </div>
+@else
+    <div class="container text-center">
+        <h1 class="h2 mb-4">この格闘家は強い？弱い？</h1>
 
     @if (!$currentFighter)
         <div class="alert alert-warning" role="alert">
@@ -156,8 +185,9 @@
                 @endforeach
             </div>
         </div>
+        </div>
     @endif
-</div>
+@endif
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {

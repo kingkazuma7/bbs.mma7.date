@@ -28,25 +28,34 @@ class VoteController extends Controller
 
     public function index(Request $request)
     {
-        if ($request->has('id')) {
+        $isTopPage = !$request->has('id');
+        $currentFighter = null;
+        $comments = collect();
+        $topFighters = collect();
+
+        if (!$isTopPage) {
             $currentFighter = Fighter::find($request->id);
             if (!$currentFighter) {
+                // ID指定があるが見つからない場合はランダムな選手を表示
                 $currentFighter = $this->fighterService->getRandomFighters(1)->first();
             }
+            if ($currentFighter) {
+                $comments = $currentFighter->comments()->latest()->paginate(10);
+            }
         } else {
-            $currentFighter = $this->fighterService->getRandomFighters(1)->first();
+            // トップページの場合は投票数順に15選手取得
+            $topFighters = Fighter::withCount('votes')->orderBy('votes_count', 'desc')->take(15)->get();
         }
 
         $allFighters = Fighter::inRandomOrder()->take(6)->get();
-        $comments = $currentFighter ? $currentFighter->comments()->latest()->paginate(10) : collect();
         $showBbs = $request->has('show_bbs');
 
         $seoData = new SEOData(
-            title: 'この格闘家は強い？弱い？',
+            title: $isTopPage ? 'ガチ格｜格闘家「強い・弱い」みんなのホンネが集まる掲示板' : 'この格闘家は強い？弱い？',
             description: '格闘家の「強い・弱い」を投票で決める匿名掲示板。みんなの本音をチェック！',
         );
 
-        return view('vote.index', compact('currentFighter', 'allFighters', 'comments', 'showBbs', 'seoData'));
+        return view('vote.index', compact('currentFighter', 'allFighters', 'comments', 'showBbs', 'seoData', 'isTopPage', 'topFighters'));
     }
 
     public function show($id)
