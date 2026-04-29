@@ -20,9 +20,15 @@
                         <span class="text-muted">画像なし</span>
                     </div>
                 @endif
+
                 <div class="d-flex justify-content-center mt-4" id="vote-buttons-section">
                     <button class="btn btn-success btn-lg mx-2 vote-button" data-fighter-id="{{ $fighter->id }}" data-vote-type="strong">強い！</button>
                     <button class="btn btn-danger btn-lg mx-2 vote-button" data-fighter-id="{{ $fighter->id }}" data-vote-type="weak">弱い！</button>
+                </div>
+
+                <div class="mt-4 mb-3">
+                    <p class="mb-1">「強い！」か「弱い！」に投票して<br>みんなのコメントを見てみよう！</p>
+                    <p class="text-muted small">※投票は1日1回まで</p>
                 </div>
 
                 <div id="vote-result" class="mt-4" style="display: none;">
