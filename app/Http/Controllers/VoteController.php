@@ -51,8 +51,9 @@ class VoteController extends Controller
         $showBbs = $request->has('show_bbs');
 
         $seoData = new SEOData(
-            title: $isTopPage ? 'ガチ格｜格闘家「強い・弱い」みんなのホンネが集まる掲示板' : 'この格闘家は強い？弱い？',
-            description: '格闘家の「強い・弱い」を投票で決める匿名掲示板。みんなの本音をチェック！',
+            title: $isTopPage ? 'ガチ格｜格闘家「強い・弱い」みんなのホンネが集まる掲示板' : ($currentFighter ? "{$currentFighter->name}は強い？弱い？｜ガチ格" : 'この格闘家は強い？弱い？'),
+            description: $isTopPage ? '格闘家の「強い・弱い」を投票で決める匿名掲示板。みんなの本音をチェック！' : ($currentFighter ? "{$currentFighter->name}の「強い・弱い」投票結果とみんなのコメント。格闘家のリアルな評価をチェックしよう。" : '格闘家の「強い・弱い」を投票で決める匿名掲示板。'),
+            image: $isTopPage ? asset('storage/top_hero.jpg') : ($currentFighter->image_path ?? asset('storage/top_hero.jpg')),
         );
 
         return view('vote.index', compact('currentFighter', 'allFighters', 'comments', 'showBbs', 'seoData', 'isTopPage', 'topFighters'));
