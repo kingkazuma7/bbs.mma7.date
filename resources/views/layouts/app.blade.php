@@ -42,7 +42,7 @@
 <body class="d-flex flex-column min-vh-100">
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container">
-            <a class="navbar-brand" href="{{ url('/') }}">
+            <a class="navbar-brand text-wrap me-0" href="{{ url('/') }}">
                 ガチ格｜格闘家「強い・弱い」
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -71,7 +71,7 @@
                     <div class="position-relative">
                         <form class="d-flex" action="{{ url('/search') }}" method="GET">
                             <input class="form-control me-2" type="text" name="q" id="search_form" value="{{ request('q') }}" placeholder="人物名・グループ名" autocomplete="off">
-                            <button class="btn btn-success" type="submit" id="search_btn" style="white-space: nowrap;">
+                            <button class="btn btn-success text-nowrap" type="submit" id="search_btn">
                                 <i class="fa fa-search"></i> 検索
                             </button>
                         </form>

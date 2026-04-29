@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container text-center">
-    <h1 class="mb-4">この格闘家は強い？弱い？</h1>
+    <h1 class="h2 mb-4">この格闘家は強い？弱い？</h1>
 
     @if (!$currentFighter)
         <div class="alert alert-warning" role="alert">
@@ -12,7 +12,7 @@
         @php $fighter = $currentFighter; @endphp
         <div class="row justify-content-center">
             <div class="col-md-6">
-                <h2 class="mb-3">{{ $fighter->name }}</h2>
+                <h1 class="h2 mb-4">{{ $fighter->name }}</h1>
                 @if ($fighter->image_path)
                     <img src="{{ $fighter->image_path }}" class="img-fluid rounded mb-3" alt="{{ $fighter->name }}" style="max-height: 400px; object-fit: contain; object-position: top;">
                 @else
@@ -118,7 +118,7 @@
         </div>
 
         <div class="mt-5 pt-4 border-top">
-            <h3 class="mb-4">関連タグ</h3>
+            <h1 class="h2 mb-4">検索結果</h1>
             <div class="row g-2 g-md-3">
                 @foreach ($allFighters as $relatedFighter)
                     <div class="col-4 col-sm-4 col-md-3 col-lg-2">
