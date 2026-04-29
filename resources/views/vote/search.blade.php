@@ -4,7 +4,7 @@
 <div class="container">
     <div class="row">
         <div class="col-md-8 offset-md-2">
-            <h1 class="mb-4">検索結果</h1>
+            <h1 class="h2 mb-4">検索結果</h1>
 
             @if (empty($query))
                 <div class="alert alert-info" role="alert">

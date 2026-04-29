@@ -4,7 +4,7 @@
 <div class="container">
     <div class="row">
         <div class="col-md-8 offset-md-2">
-            <h1 class="mb-4">{{ $fighter->name }} の詳細</h1>
+            <h1 class="h2 mb-4">{{ $fighter->name }} の詳細</h1>
 
             @if ($fighter->image_path)
                 <img src="{{ $fighter->image_path }}" class="img-fluid rounded mb-4" alt="{{ $fighter->name }}" style="max-height: 400px; object-fit: contain; object-position: top;">

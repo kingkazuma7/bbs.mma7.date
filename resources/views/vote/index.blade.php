@@ -11,8 +11,8 @@
     @else
         @php $fighter = $currentFighter; @endphp
         <div class="row justify-content-center">
-            <div class="col-md-6">
-                <h1 class="h2 mb-4">{{ $fighter->name }}</h1>
+            <article class="col-md-6">
+                <h2 class="mb-3">{{ $fighter->name }}</h2>
                 @if ($fighter->image_path)
                     <img src="{{ $fighter->image_path }}" class="img-fluid rounded mb-3" alt="{{ $fighter->name }}" style="max-height: 400px; object-fit: contain; object-position: top;">
                 @else
@@ -21,14 +21,14 @@
                     </div>
                 @endif
 
-                <div class="d-flex justify-content-center mt-4" id="vote-buttons-section">
-                    <button class="btn btn-success btn-lg mx-2 vote-button" data-fighter-id="{{ $fighter->id }}" data-vote-type="strong">強い！</button>
-                    <button class="btn btn-danger btn-lg mx-2 vote-button" data-fighter-id="{{ $fighter->id }}" data-vote-type="weak">弱い！</button>
-                </div>
-
                 <div class="mt-4 mb-3">
                     <p class="mb-1">「強い！」か「弱い！」に投票して<br>みんなのコメントを見てみよう！</p>
                     <p class="text-muted small">※投票は1日1回まで</p>
+                </div>
+
+                <div class="d-flex justify-content-center mt-4" id="vote-buttons-section">
+                    <button class="btn btn-success btn-lg mx-2 vote-button" data-fighter-id="{{ $fighter->id }}" data-vote-type="strong">強い！</button>
+                    <button class="btn btn-danger btn-lg mx-2 vote-button" data-fighter-id="{{ $fighter->id }}" data-vote-type="weak">弱い！</button>
                 </div>
 
                 <div id="vote-result" class="mt-4" style="display: none;">
@@ -43,7 +43,23 @@
                             <div class="progress mb-4">
                                 <div id="weak-bar" class="progress-bar bg-danger" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemax="100"></div>
                             </div>
-                            <p><strong>合計投票数:</strong> <span id="total-count">0</span> 票</p>
+                            <p class="mb-3"><strong>合計投票数:</strong> <span id="total-count">0</span> 票</p>
+                            
+                            <hr>
+                            <div class="mt-3 text-center">
+                                <p class="small text-muted mb-2">結果をシェアしよう！</p>
+                                <div class="d-flex justify-content-center gap-2 flex-wrap">
+                                    <a id="share-x" href="#" target="_blank" class="btn btn-dark btn-sm">
+                                        <i class="fab fa-x-twitter"></i> X
+                                    </a>
+                                    <a id="share-line" href="#" target="_blank" class="btn btn-success btn-sm" style="background-color: #06C755; border-color: #06C755;">
+                                        <i class="fab fa-line"></i> LINE
+                                    </a>
+                                    <button id="copy-url-btn" class="btn btn-outline-secondary btn-sm">
+                                        <i class="fas fa-link"></i> URLをコピー
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -56,7 +72,7 @@
                                 @if ($comments && $comments->count() > 0)
                                     <ul class="list-group list-group-flush">
                                         @foreach ($comments as $comment)
-                                            <li class="list-group-item py-3">
+                                            <li class="list-group-item py-3 text-start">
                                                 <div class="d-flex justify-content-between align-items-start mb-2">
                                                     <small class="text-muted">
                                                         <strong>#{{ $comment->hash_id }} 匿名</strong>
@@ -94,7 +110,7 @@
                         </div>
 
                         <!-- コメント投稿フォーム -->
-                        <div class="card">
+                        <div class="card text-start">
                             <div class="card-header">コメントを投稿する</div>
                             <div class="card-body">
                                 <form id="comment-form">
@@ -114,11 +130,11 @@
                     </div>
                 </div>
 
-            </div>
+            </article>
         </div>
 
         <div class="mt-5 pt-4 border-top">
-            <h1 class="h2 mb-4">検索結果</h1>
+            <h3 class="mb-4">関連タグ</h3>
             <div class="row g-2 g-md-3">
                 @foreach ($allFighters as $relatedFighter)
                     <div class="col-4 col-sm-4 col-md-3 col-lg-2">
@@ -204,12 +220,48 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('vote-result').style.display = 'block';
         document.getElementById('vote-buttons-section').style.display = 'none';
 
+        // シェアボタンの更新
+        updateShareLinks();
+
         // スクロールしてコメントセクションを表示
         const bbsSection = document.getElementById('bbs-section');
         if (bbsSection) {
             bbsSection.scrollIntoView({ behavior: 'smooth' });
         }
     }
+
+    function updateShareLinks() {
+        const url = window.location.href;
+        const fighterName = document.querySelector('h2') ? document.querySelector('h2').textContent : '';
+        const text = `${fighterName} は強い？弱い？ 投票結果をチェック！ #格闘家強い弱い`;
+        
+        const xShare = document.getElementById('share-x');
+        if (xShare) {
+            xShare.href = `https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}`;
+        }
+        
+        const lineShare = document.getElementById('share-line');
+        if (lineShare) {
+            lineShare.href = `https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(url)}`;
+        }
+    }
+
+    // URLコピーボタン
+    const copyBtn = document.getElementById('copy-url-btn');
+    if (copyBtn) {
+        copyBtn.addEventListener('click', function() {
+            navigator.clipboard.writeText(window.location.href).then(() => {
+                const originalContent = this.innerHTML;
+                this.innerHTML = '<i class="fas fa-check"></i> コピー完了';
+                setTimeout(() => {
+                    this.innerHTML = originalContent;
+                }, 2000);
+            });
+        });
+    }
+
+    // 初期ロード時にもシェアリンクをセット
+    updateShareLinks();
 
     // コメント投稿フォーム処理
     const commentForm = document.getElementById('comment-form');
