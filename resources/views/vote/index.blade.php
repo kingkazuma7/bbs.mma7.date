@@ -17,16 +17,6 @@
             </div>
         </div>
 
-        <!-- 選手一覧ブロック -->
-        <div class="mt-5 pt-4">
-            <h3 class="h5 mb-4 fw-bold text-secondary"><i class="fas fa-fire text-danger me-2"></i>話題の格闘家をチェック</h3>
-            <div class="d-flex flex-wrap gap-2 justify-content-center justify-content-md-start">
-                @foreach($topFighters as $topFighter)
-                    <a href="{{ url('/') }}?id={{ $topFighter->id }}" class="btn btn-light border rounded-pill px-4 py-2 hover-shadow transition-all" style="font-weight: 600;">
-                        <span class="text-primary me-1">#</span>{{ $topFighter->name }}
-                    </a>
-                @endforeach
-            </div>
         </div>
     </div>
 @else
@@ -188,6 +178,20 @@
         </div>
     @endif
 @endif
+
+<!-- 共通：話題の格闘家（ハッシュタグ形式） -->
+<div class="container mb-5">
+    <div class="mt-5 pt-4 @if(!$isTopPage) border-top @endif">
+        <h3 class="h5 mb-4 fw-bold text-secondary text-center text-md-start"><i class="fas fa-fire text-danger me-2"></i>話題の格闘家をチェック</h3>
+        <div class="d-flex flex-wrap gap-2 justify-content-center justify-content-md-start">
+            @foreach($topFighters as $topFighter)
+                <a href="{{ url('/') }}?id={{ $topFighter->id }}" class="btn btn-light border rounded-pill px-3 px-md-4 py-2 hover-shadow transition-all" style="font-weight: 600; font-size: 0.9rem;">
+                    <span class="text-primary me-1">#</span>{{ $topFighter->name }}
+                </a>
+            @endforeach
+        </div>
+    </div>
+</div>
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {

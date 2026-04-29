@@ -42,10 +42,10 @@ class VoteController extends Controller
             if ($currentFighter) {
                 $comments = $currentFighter->comments()->latest()->paginate(10);
             }
-        } else {
-            // トップページの場合は投票数順に15選手取得
-            $topFighters = Fighter::withCount('votes')->orderBy('votes_count', 'desc')->take(15)->get();
         }
+
+        // 投票数順に15選手取得（全ページで使用）
+        $topFighters = Fighter::withCount('votes')->orderBy('votes_count', 'desc')->take(15)->get();
 
         $allFighters = Fighter::inRandomOrder()->take(6)->get();
         $showBbs = $request->has('show_bbs');
