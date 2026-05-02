@@ -1,13 +1,15 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\VoteController;
-use App\Http\Controllers\FighterController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\FighterController;
+use App\Http\Controllers\VoteController;
+use Illuminate\Support\Facades\Route;
 
 // 投票ページ
 Route::get('/', [VoteController::class, 'index']);
-Route::get('/fighter/{id}', [VoteController::class, 'show']);
+Route::get('/people/vote/{fighterName}', [VoteController::class, 'vote'])->name('people.vote');
+Route::get('/people/result/{fighterName}', [VoteController::class, 'result'])->name('people.result');
+Route::get('/fighter/{id}', [VoteController::class, 'redirectLegacyFighterShow'])->whereNumber('id');
 
 // 検索
 Route::get('/search', [VoteController::class, 'search']);
@@ -31,4 +33,3 @@ Route::middleware(['auth', 'admin.only'])->group(function () {
     Route::put('/admin/fighters/{id}', [FighterController::class, 'update']);
     Route::delete('/admin/fighters/{id}', [FighterController::class, 'destroy']);
 });
-

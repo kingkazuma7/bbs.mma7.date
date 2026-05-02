@@ -30,7 +30,7 @@
     @else
         @php $fighter = $currentFighter; @endphp
         <div class="row justify-content-center">
-            <article class="col-md-6">
+            <article class="col-md-6" data-after-comment-url="{{ route('people.vote', ['fighterName' => $fighter->name]) }}?show_bbs=1">
                 <h2 class="mb-1">{{ $fighter->name }}</h2>
                 <div class="mb-3 d-flex flex-wrap gap-1 justify-content-center">
                     @if($fighter->fight_style && count($fighter->fight_style) > 0)
@@ -58,7 +58,7 @@
                     <p class="text-muted small">※投票は1日1回まで</p>
                 </div>
 
-                <div class="d-flex justify-content-center mt-4" id="vote-buttons-section">
+                <div class="d-flex justify-content-center mt-4" id="vote-buttons-section" data-result-url="{{ route('people.result', ['fighterName' => $fighter->name]) }}">
                     <button class="btn btn-success btn-lg mx-2 vote-button" data-fighter-id="{{ $fighter->id }}" data-vote-type="strong">強い！</button>
                     <button class="btn btn-danger btn-lg mx-2 vote-button" data-fighter-id="{{ $fighter->id }}" data-vote-type="weak">弱い！</button>
                 </div>
@@ -130,9 +130,9 @@
                                     </ul>
 
                                     <!-- ページネーション -->
-                                    @if ($comments->hasPages())
+                                        @if ($comments->hasPages())
                                         <div class="mt-3">
-                                            {{ $comments->appends(['id' => $currentFighter->id, 'show_bbs' => '1'])->links() }}
+                                            {{ $comments->withQueryString()->links() }}
                                         </div>
                                     @endif
                                 @else
@@ -170,7 +170,7 @@
             <div class="row g-2 g-md-3">
                 @foreach ($allFighters as $relatedFighter)
                     <div class="col-4 col-sm-4 col-md-3 col-lg-2">
-                        <a href="{{ url('/') }}?id={{ $relatedFighter->id }}" class="text-decoration-none text-dark">
+                        <a href="{{ route('people.vote', ['fighterName' => $relatedFighter->name]) }}" class="text-decoration-none text-dark">
                             <div class="card h-100 hover-shadow" style="transition: box-shadow 0.3s;">
                                 @if ($relatedFighter->image_path)
                                     <img src="{{ $relatedFighter->image_path }}" class="card-img-top" alt="{{ $relatedFighter->name }}" style="height: 100px; object-fit: contain; object-position: top;">
@@ -198,7 +198,7 @@
         <h3 class="h5 mb-4 fw-bold text-secondary text-center text-md-start"><i class="fas fa-fire text-danger me-2"></i>話題の格闘家をチェック</h3>
         <div class="d-flex flex-wrap gap-2 justify-content-center justify-content-md-start">
             @foreach($topFighters as $topFighter)
-                <a href="{{ url('/') }}?id={{ $topFighter->id }}" class="btn btn-light border rounded-pill px-3 px-md-4 py-2 hover-shadow transition-all" style="font-weight: 600; font-size: 0.9rem;">
+                <a href="{{ route('people.vote', ['fighterName' => $topFighter->name]) }}" class="btn btn-light border rounded-pill px-3 px-md-4 py-2 hover-shadow transition-all" style="font-weight: 600; font-size: 0.9rem;">
                     <span class="text-primary me-1">#</span>{{ $topFighter->name }}
                 </a>
             @endforeach
@@ -231,6 +231,12 @@ document.addEventListener('DOMContentLoaded', function () {
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
+                    const section = document.getElementById('vote-buttons-section');
+                    const resultUrl = section && section.dataset.resultUrl;
+                    if (resultUrl) {
+                        window.location.href = resultUrl;
+                        return;
+                    }
                     const stats = data.data.stats;
                     displayVoteResult(stats);
                 } else {
@@ -335,7 +341,8 @@ document.addEventListener('DOMContentLoaded', function () {
             .then(data => {
                 if (data.success) {
                     alert(data.message);
-                    location.href = `/?id=${fighterId}&show_bbs=1`;
+                    const afterCommentEl = document.querySelector('[data-after-comment-url]');
+                    location.href = afterCommentEl ? afterCommentEl.dataset.afterCommentUrl : '/';
                 } else {
                     alert(data.message);
                 }

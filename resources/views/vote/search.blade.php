@@ -20,7 +20,7 @@
                 <div class="row g-2 g-md-3">
                     @foreach ($results as $fighter)
                         <div class="col-4 col-sm-4 col-md-3 col-lg-2">
-                            <a href="{{ url('/') }}?id={{ $fighter->id }}" class="text-decoration-none text-dark">
+                            <a href="{{ route('people.vote', ['fighterName' => $fighter->name]) }}" class="text-decoration-none text-dark">
                                 <div class="card h-100 hover-shadow" style="transition: box-shadow 0.3s;">
                                     @if ($fighter->image_path)
                                         <img src="{{ $fighter->image_path }}" class="card-img-top" alt="{{ $fighter->name }}" style="height: 100px; object-fit: contain; object-position: top;">

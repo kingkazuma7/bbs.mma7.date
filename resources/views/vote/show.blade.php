@@ -4,10 +4,12 @@
 <div class="container">
     <div class="row">
         <div class="col-md-8 offset-md-2">
-            <h1 class="h2 mb-4">{{ $fighter->name }} の詳細</h1>
+            <h1 class="h2 mb-4 text-center">{{ $fighter->name }} の詳細</h1>
 
             @if ($fighter->image_path)
-                <img src="{{ $fighter->image_path }}" class="img-fluid rounded mb-4" alt="{{ $fighter->name }}" style="max-height: 400px; object-fit: contain; object-position: top;">
+                <div class="d-flex justify-content-center mb-4">
+                    <img src="{{ $fighter->image_path }}" class="img-fluid rounded" alt="{{ $fighter->name }}" style="max-height: 400px; object-fit: contain; object-position: center;">
+                </div>
             @else
                 <div class="bg-light d-flex align-items-center justify-content-center mb-4" style="width: 100%; height: 400px; border-radius: .25rem;">
                     <span class="text-muted">画像なし</span>
@@ -27,10 +29,6 @@
                     </div>
                     <p><strong>合計投票数:</strong> {{ $stats['total_count'] }} 票</p>
                 </div>
-            </div>
-
-            <div class="mb-4">
-                <a href="{{ url('/') }}" class="btn btn-secondary">投票ページに戻る</a>
             </div>
 
             <div class="card mb-4">
@@ -63,6 +61,45 @@
                     @endif
                 </div>
             </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="mt-5 pt-4 border-top">
+        <h3 class="mb-4">関連タグ</h3>
+        <div class="row g-2 g-md-3">
+            @foreach ($allFighters as $relatedFighter)
+                <div class="col-4 col-sm-4 col-md-3 col-lg-2">
+                    <a href="{{ route('people.vote', ['fighterName' => $relatedFighter->name]) }}" class="text-decoration-none text-dark">
+                        <div class="card h-100 hover-shadow" style="transition: box-shadow 0.3s;">
+                            @if ($relatedFighter->image_path)
+                                <img src="{{ $relatedFighter->image_path }}" class="card-img-top" alt="{{ $relatedFighter->name }}" style="height: 100px; object-fit: contain; object-position: top;">
+                            @else
+                                <div class="bg-light d-flex align-items-center justify-content-center" style="height: 100px; border-bottom: 1px solid #dee2e6;">
+                                    <small class="text-muted">画像なし</small>
+                                </div>
+                            @endif
+                            <div class="card-body p-2 text-center">
+                                <p class="card-text fw-bold small mb-0 text-truncate">{{ $relatedFighter->name }}</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            @endforeach
+        </div>
+    </div>
+</div>
+
+<div class="container mb-5">
+    <div class="mt-5 pt-4 border-top">
+        <h3 class="h5 mb-4 fw-bold text-secondary text-center text-md-start"><i class="fas fa-fire text-danger me-2"></i>話題の格闘家をチェック</h3>
+        <div class="d-flex flex-wrap gap-2 justify-content-center justify-content-md-start">
+            @foreach ($topFighters as $topFighter)
+                <a href="{{ route('people.vote', ['fighterName' => $topFighter->name]) }}" class="btn btn-light border rounded-pill px-3 px-md-4 py-2 hover-shadow transition-all" style="font-weight: 600; font-size: 0.9rem;">
+                    <span class="text-primary me-1">#</span>{{ $topFighter->name }}
+                </a>
+            @endforeach
         </div>
     </div>
 </div>

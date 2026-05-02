@@ -2,33 +2,32 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use App\Models\Vote;
-use App\Models\Comment;
-use RalphJSmit\Laravel\SEO\Support\SEOData;
+use Illuminate\Database\Eloquent\Model;
 use RalphJSmit\Laravel\SEO\Support\HasSEO;
+use RalphJSmit\Laravel\SEO\Support\SEOData;
 
 class Fighter extends Model
 {
     use HasFactory, HasSEO;
+
     protected $fillable = ['name', 'image_url', 'weight_class', 'fight_style'];
-    
+
     protected $casts = [
         'weight_class' => 'array',
         'fight_style' => 'array',
     ];
-    
+
     public function votes()
     {
         return $this->hasMany(Vote::class);
     }
-    
+
     public function comments()
     {
         return $this->hasMany(Comment::class);
     }
-    
+
     public function getVoteStats()
     {
         $votes = $this->votes()->get();
@@ -47,28 +46,28 @@ class Fighter extends Model
 
     public function getImagePathAttribute()
     {
-        if (!$this->image_url) {
+        if (! $this->image_url) {
             return null;
         }
 
         // 既に fighters/ を含んでいる場合は、そのまま使用
         if (str_starts_with($this->image_url, 'fighters/')) {
-            $path = asset('storage/' . $this->image_url);
+            $path = asset('storage/'.$this->image_url);
         } else {
             // fighters/ を含んでいない場合は、プレフィックスを追加
-            $path = asset('storage/fighters/' . $this->image_url);
+            $path = asset('storage/fighters/'.$this->image_url);
         }
 
         // キャッシュバスターを追加（updated_atをパラメータに）
-        return $path . '?v=' . $this->updated_at->timestamp;
+        return $path.'?v='.$this->updated_at->timestamp;
     }
 
     public function getDynamicSEOData(): SEOData
     {
-        return SEOData::make([
-            'title' => $this->name,
-            'description' => "{$this->name}の強い・弱い投票結果。みんなの本音をチェック！",
-            'image' => $this->image_path,
-        ]);
+        return new SEOData(
+            title: $this->name,
+            description: "{$this->name}の強い・弱い投票結果。みんなの本音をチェック！",
+            image: $this->image_path ?? asset('storage/top_hero.jpg'),
+        );
     }
 }
