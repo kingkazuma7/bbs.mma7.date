@@ -23,11 +23,14 @@ class VoteService
         ]);
 
         // 自分以外（管理者のIP以外）の場合に通知を送信
-        // TODO: .env などで管理者のIPを指定できるようにするとより正確です
         $adminIp = config('app.admin_ip'); 
         if ($ipAddress !== $adminIp) {
-            Notification::route('mail', 'ps3neito@yahoo.co.jp')
-                ->notify(new NewVoteNotification($vote));
+            try {
+                Notification::route('mail', 'ps3neito@yahoo.co.jp')
+                    ->notify(new NewVoteNotification($vote));
+            } catch (\Exception $e) {
+                \Illuminate\Support\Facades\Log::warning('NewVoteNotification failed: ' . $e->getMessage());
+            }
         }
         
         // 最新の統計を返す
