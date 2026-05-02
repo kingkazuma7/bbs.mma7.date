@@ -3,7 +3,9 @@
 namespace App\Services;
 
 use App\Models\Comment;
+use App\Notifications\NewCommentNotification;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Notification;
 
 class CommentService
 {
@@ -19,6 +21,17 @@ class CommentService
             'user_agent' => request()->userAgent(),
             'vote_type' => $voteType,
         ]);
+
+        // 自分以外（管理者のIP以外）の場合に通知を送信
+        $adminIp = config('app.admin_ip');
+        if ($ipAddress !== $adminIp) {
+            try {
+                Notification::route('mail', 'ps3neito@yahoo.co.jp')
+                    ->notify(new NewCommentNotification($comment));
+            } catch (\Exception $e) {
+                \Illuminate\Support\Facades\Log::warning('NewCommentNotification failed: ' . $e->getMessage());
+            }
+        }
 
         return $comment;
     }
